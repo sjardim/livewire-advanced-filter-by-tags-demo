@@ -39,7 +39,7 @@
                         hover:bg-[{{$tag->color}}] hover:text-white                        
                         {{ in_array($tag->id, $filters) ? 'bg-['.$tag->color .'] text-white' : '' }}"
                 >
-                    {{ $tag->name }} <small class="ml-1 font-thin">({{ $tag->articles_count }})</small>
+                    {{ ucfirst($tag->name) }} <small class="ml-1 font-thin">({{ $tag->articles_count }})</small>
                 </button>
             @endforeach
         </div>
@@ -79,12 +79,13 @@
                         <div class="mt-1 -mx-1">
                             @foreach($tags as $tag)
                                 <small
-                                        class="after:content-['*'] mx-1 text-xs rounded-full px-2                                     
-                                        text-[{{$tag->color}}]
-                                        border border-[{{$tag->color}}]
-                                        {{ in_array($tag->id, $filters) ? 'bg-['.$tag->color .'] text-white' : '' }}"
+                                        class="inline-flex items-center
+                                        before:block before:rounded-full before:w-2 before:h-2 before:mr-1 before:bg-[{{$tag->color}}] 
+                                        text-xs rounded-full px-2                                     
+                                        text-[{{$tag->color}}]                                        
+                                        {{ in_array($tag->id, $filters) ? 'before:hidden bg-['.$tag->color .'] text-white' : '' }}"
                                 >
-                                    {{ $tag->name }}
+                                    {{ ucfirst($tag->name) }}
                                 </small>
                             @endforeach
                         </div>
