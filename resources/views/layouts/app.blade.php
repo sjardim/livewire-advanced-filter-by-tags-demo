@@ -15,7 +15,7 @@
 
     @livewireStyles
 </head>
-<body>
+<body class="bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400">
     <div id="app" class="relative">
        
         <main class="">

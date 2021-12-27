@@ -4,7 +4,7 @@
         <label class="relative block w-full">
             <span class="sr-only">Search</span>
             <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-                <svg class="h-5 w-5 fill-gray-300" viewBox="0 0 20 20">
+                <svg class="h-5 w-5 fill-stone-300 dark:fill-stone-500" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
                 </svg>
             </span>
@@ -15,18 +15,13 @@
                 name="search"
                 value=""
                 placeholder="Type something..."
-                class="placeholder:italic placeholder:text-gray-400 block bg-white w-full border border-gray-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" 
-                placeholder="Search for anything..." type="text" name="search"/>
+                class="placeholder:italic placeholder:text-stone-400 dark:placeholder:text-stone-500 dark:text-stone-400 block bg-stone-50 dark:bg-stone-900 w-full border border-stone-300 dark:border-stone-600 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" 
+                placeholder="Search all articles and videos..." type="text" name="search"/>
         </label>
-
-        <div
-                wire:loading
-                wire:target="search-box"
-                class="ml-2 text-gray-500"
-        >🔎 searching...</div>
     </div>
 
     @if($uniqueTags)
+        <h1 class="my-4 text-stone-600 dark:text-stone-500 font-serif">Most used tags</h1>
         <div class="flex flex-wrap mt-4 -m-1 gap-2">
             @foreach($uniqueTags as $tag)           
                 <button
@@ -47,10 +42,10 @@
 
     <div class="">
         @if($articles->count())
-            <div class="my-6 border-b pb-2 text-sm flex justify-between">
+            <div class="my-6 border-b dark:border-stone-700 pb-2 text-sm flex justify-between">
                 <div class="flex">
                     Per page:
-                    <select wire:model="perPage">
+                    <select wire:model="perPage" class="ml-1 bg-stone-100 dark:bg-stone-700">
                         <option>10</option>
                         <option>15</option>
                         <option>25</option>
@@ -58,7 +53,7 @@
                 </div>
                 <div class="flex">
                     Sort by:
-                    <select wire:model="sort">
+                    <select wire:model="sort" class="ml-1 bg-stone-100 dark:bg-stone-700">
                         <option value="title|asc" title="Title ascending">Title A-Z &uparrow;</option>
                         <option value="title|desc" title="Title descending">Title Z-A &downarrow;</option>
                         <option value="created_at|desc" title="Date descending">Newest &downarrow;</option>
@@ -67,12 +62,12 @@
                 </div>
             </div>
 
-            <div class="flex flex-col space-y-6 border-b mb-4 pb-4">
+            <div class="flex flex-col space-y-6 border-b dark:border-stone-700 mb-4 pb-4">
             @foreach($articles as $article)
                 <article>
                     <header class="flex flex-col flex-col-reverse md:flex-row">
-                        <h2 class="text-xl text-gray-600 tracking-wide flex-1 font-serif">{{$article->title}}</h2>
-                        <span class="text-sm text-gray-500">{{$article->created_at->diffForHumans()}}</span>
+                        <h2 class="text-xl text-stone-600 dark:text-stone-500 tracking-wide flex-1 font-serif">{{$article->title}}</h2>
+                        <span class="text-sm text-stone-500 dark:text-stone-600">{{$article->created_at->diffForHumans()}}</span>
                     </header>
 
                     @if($tags = $article->tags)
@@ -98,7 +93,7 @@
             {{ $articles->links() }}
 
         @else
-            <h2 class="text-xl text-gray-600 tracking-wide flex-1 font-serif py-8">No results found.</h2>
+            <h2 class="text-xl text-stone-600 dark:text-stone-500 tracking-wide flex-1 font-serif py-8">No results found.</h2>
         @endif
     </div>
 </div>
