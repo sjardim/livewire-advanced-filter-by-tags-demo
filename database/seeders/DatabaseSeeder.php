@@ -17,16 +17,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {       
-        $tag_count = 50;
-
         $articles = Article::factory()->count(100)->create();
 
         $videos = Video::factory()->count(100)->create();
 
         $tags = Tag::factory()->count(50)->create();
 
-        foreach ((range(1, $tag_count)) as $index) {
-            Article::find(rand(1,50))->tags()->sync([
+        foreach ((range(1,50)) as $index) {
+            Article::find(rand(1,100))->tags()->sync([
                 rand(1, (rand(1,10))), 
                 rand(1, (rand(11,20))), 
                 rand(1, (rand(21,30))), 

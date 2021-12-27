@@ -28,8 +28,6 @@ class Search extends Component
 
     public function render()
     {
-        // $articles = Article::with('tags')->paginate($this->perPage);
-
         $articles = Article::with('tags')->withCount('tags');
         
         //Get tag count without being affect by pagination        
@@ -80,7 +78,7 @@ class Search extends Component
 
     private function applySearchFilter($articles)
     {
-        if ($this->search) {
+        if ($this->search) {            
             return $articles->whereRaw("title LIKE \"%$this->search%\"");
         }
 
