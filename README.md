@@ -6,11 +6,16 @@ The Tag list shows the article/video count of each tag and works with pagination
 
 The demo provides a SQLite database (database/database.sqlite) already populated with 100 articles, 100 videos, and 50 tags, so you don't need to migrate the DB to see things working. But you can also seed the database with the provided seeder classes by running `php artisan migrate --seed` after updating your .env file.
 
-## Screenshot
+## Screenshots
 
 <details>
- <summary>Light mode</summary>
-![Demo screenshot](https://user-images.githubusercontent.com/125217/147500063-bbe79fb6-4617-4d97-a087-023bcce67564.png)
+<summary>Light mode</summary>
+<img src="https://user-images.githubusercontent.com/125217/147500063-bbe79fb6-4617-4d97-a087-023bcce67564.png" width="800" alt="" />
+</details>
+
+<details>
+<summary>Dark mode</summary>
+<img src="https://user-images.githubusercontent.com/125217/147500417-c146882c-5b7d-426b-8f77-e0080d8af7d2.png" width="800" alt="" />
 </details>
 
 
