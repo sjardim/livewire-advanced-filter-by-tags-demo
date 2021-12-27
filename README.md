@@ -31,10 +31,10 @@ You don't need to run `npm install` as we are using Tailwind CSS 3.0 via its CDN
 
 ## Performance
 
-I tried to make it to perform the fastest way I could. To load 10 articles per page and 45 tags on my 13" MacBook Pro M1, [Laravel DebugBar](https://github.com/barryvdh/laravel-debugbar) shows on **subsequent page loads**:
+Loading 10 articles (titles + date + tags) per page and the 15 most used tags on my 13" MacBook Pro M1, [Laravel DebugBar](https://github.com/barryvdh/laravel-debugbar) took on **subsequent page loads**:
 
 1. Using the provided SQLite database: less than 50ms using 2MB of RAM.
-1. Using the a MySQL 5.4 database: less than 80ms using 2MB of RAM.
+1. Using the a MySQL 8.0.22 database: less than 80ms using 2MB of RAM.
 
 This demo app is an updated and improved version of my old [Livewire 1 demo](https://github.com/sjardim/laravel-livewire-demo) which was based from [/breadthe/laravel-livewire-demo](https://github.com/breadthe/laravel-livewire-demo).
 
