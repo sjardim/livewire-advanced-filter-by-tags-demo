@@ -3,9 +3,12 @@
 namespace App\Http\Livewire;
 
 use App\Models\Tag;
+use App\Models\Video;
 use App\Models\Article;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Collection;
+use ProtoneMedia\LaravelCrossEloquentSearch\Search as CrossSearch;
 
 class Search extends Component
 {
@@ -14,9 +17,9 @@ class Search extends Component
     protected $listeners = ['filterByTag' => 'filterByTag'];
 
     public $search;
-    public $filters = [];
-    public $perPage = 10;
-    public $sort = 'created_at|desc';
+    public array $filters = [];
+    public int $perPage = 10;
+    public string $sort = 'updated_at|desc';
     
     /*
      * Reset pagination when doing a search
@@ -28,19 +31,31 @@ class Search extends Component
 
     public function render()
     {
-        $articles = Article::with('tags')->withCount('tags');
-        
+        // $articles = Article::with('tags');
+        // $videos = Video::with('tags');
+
+        // $results = $articles->union($videos);
+
         //Get tag count without being affect by pagination        
-        $uniqueTags = $this->getTags();        
+        $tags = $this->getTags();        
+        // $tags = [];
 
-        $this->applySearchFilter($articles);
+        $results = $this->applySearchFilter();
 
-        $this->applyTagFilter($articles);
+        // if($this->search) {
+        //     $results = $this->applySearchFilter($results);
+        //     $results->orderBy($this->sortByColumn(), $this->sortDirection());
+        // } else {
+        //     $results = $results->orderBy($this->sortByColumn(), $this->sortDirection())
+        // ->paginate($this->perPage);
+        // }
 
-        $articles = $articles->orderBy($this->sortByColumn(), $this->sortDirection())
-        ->paginate($this->perPage);
 
-        return view('livewire.search')->with(compact('articles', 'uniqueTags'));
+        // $this->applyTagFilter($results);
+
+        
+
+        return view('livewire.search')->with(compact('results', 'tags'));
     }
 
     
@@ -61,12 +76,7 @@ class Search extends Component
     public function sortByColumn()
     {
         $sort = explode("|", $this->sort);
-
-        if(!$sort[0]) {
-            return;
-        }
-
-        return $sort[0];
+        return $sort[0] ?? null;
     }
 
     public function sortDirection()
@@ -76,20 +86,48 @@ class Search extends Component
         return $sort[1] ?? 'asc';
     }
 
-    private function applySearchFilter($articles)
+    private function applySearchFilter()
     {
-        if ($this->search) {            
-            return $articles->whereRaw("title LIKE \"%$this->search%\"");
+        
+        if($this->search) {        
+            return CrossSearch::new()
+            ->add(Article::class, 'title', 'updated_at')
+            ->orderBy($this->sortByColumn())
+            ->add(Video::class, 'title', 'updated_at')
+            ->orderBy($this->sortByColumn())
+            ->includeModelType()
+            ->beginWithWildcard()
+            // ->orderByRelevance()
+            ->orderByDesc()
+            ->paginate($this->perPage)
+            ->get($this->search);
         }
+    
+        return CrossSearch::new()
+            ->add(Article::class, 'title', 'updated_at')
+            ->add(Video::class, 'title', 'updated_at')
+            ->orderByDesc()
+            ->includeModelType()
+            ->paginate($this->perPage)
+            ->get();
 
-        return null;
+
+        // return CrossSearch::new()
+        //     ->add(Article::with('tags'), 'title', 'updated_at')
+        //     ->add(Video::with('tags'), 'title', 'updated_at')
+        //     ->beginWithWildcard()
+        //     ->orderByDesc()
+        //     ->paginate($this->perPage)
+        //     ->get($this->search);
+
+            
     }
 
-    private function applyTagFilter($articles)
+    private function applyTagFilter($results)
     {
         if ($this->filters) {
             foreach ($this->filters as $filter) {
-                $articles->whereHas('tags', function ($query) use ($filter) {
+                $results->whereHas('tags', function ($query) use ($filter) {
                     $query->where('id', $filter);
                 });
             }
@@ -100,12 +138,13 @@ class Search extends Component
 
     private function getTags()
     {
-        $tags = Tag::withCount('articles')
-            ->orderBy('articles_count', 'DESC')
+        $tags = Tag::withCount(['articles', 'videos'])
+            ->orderBy('articles_count', 'DESC')            
+            ->orderBy('videos_count', 'DESC')
             ->take(15)
             ->get();
 
-        // Show only tags with articles
+        // Show only tags that are used
         return $tags->filter( function ($tag) {
             return $tag->articles_count > 0;
         });

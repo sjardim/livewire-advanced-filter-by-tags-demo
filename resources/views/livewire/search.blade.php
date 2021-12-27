@@ -16,14 +16,14 @@
                 value=""
                 placeholder="Type something..."
                 class="placeholder:italic placeholder:text-stone-400 dark:placeholder:text-stone-500 dark:text-stone-400 block bg-stone-50 dark:bg-stone-900 w-full border border-stone-300 dark:border-stone-600 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" 
-                placeholder="Search all articles and videos..." type="text" name="search"/>
+                placeholder="Search all results and videos..." type="text" name="search"/>
         </label>
     </div>
 
-    @if($uniqueTags)
+    @if($tags)
         <h1 class="my-4 text-stone-600 dark:text-stone-500 font-serif">Most used tags</h1>
         <div class="flex flex-wrap mt-4 -m-1 gap-2">
-            @foreach($uniqueTags as $tag)           
+            @foreach($tags as $tag)           
                 <button
                         wire:click="$emit('filterByTag', {{ $tag->id }})"
                         wire:ref="search-box"
@@ -34,14 +34,14 @@
                         hover:bg-[{{$tag->color}}] hover:text-white                        
                         {{ in_array($tag->id, $filters) ? 'bg-['.$tag->color .'] text-white' : '' }}"
                 >
-                    {{ ucfirst($tag->name) }} <small class="ml-1 font-thin">({{ $tag->articles_count }})</small>
+                    {{ ucfirst($tag->name) }} <small class="ml-1 font-thin">({{ $tag->articles_count + $tag->videos_count }})</small>
                 </button>
             @endforeach
         </div>
     @endif
 
     <div class="">
-        @if($articles->count())
+        @if($results->count())
             <div class="my-6 border-b dark:border-stone-700 pb-2 text-sm flex justify-between">
                 <div class="flex">
                     Per page:
@@ -62,15 +62,17 @@
                 </div>
             </div>
 
+            {{ $sort }}
             <div class="flex flex-col space-y-6 border-b dark:border-stone-700 mb-4 pb-4">
-            @foreach($articles as $article)
+            @foreach($results as $result)
                 <article>
                     <header class="flex flex-col flex-col-reverse md:flex-row">
-                        <h2 class="text-xl text-stone-600 dark:text-stone-500 tracking-wide flex-1 font-serif">{{$article->title}}</h2>
-                        <span class="text-sm text-stone-500 dark:text-stone-600">{{$article->created_at->diffForHumans()}}</span>
+                        <h2 class="text-xl text-stone-600 dark:text-stone-500 tracking-wide flex-1 font-serif">
+                        <small>[{{$result->type}}]</small> - {{$result->title}}</h2>
+                        <span class="text-sm text-stone-500 dark:text-stone-600">{{$result->created_at->diffForHumans()}}</span>
                     </header>
 
-                    @if($tags = $article->tags)
+                    @if($tags = $result->tags)
                         <div class="mt-1 -mx-1">
                             @foreach($tags as $tag)
                                 <small
@@ -90,7 +92,7 @@
             </div>
 
 
-            {{ $articles->links() }}
+            {{ $results->links() }}
 
         @else
             <h2 class="text-xl text-stone-600 dark:text-stone-500 tracking-wide flex-1 font-serif py-8">No results found.</h2>
