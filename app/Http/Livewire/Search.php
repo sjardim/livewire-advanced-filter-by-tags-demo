@@ -31,29 +31,21 @@ class Search extends Component
 
     public function render()
     {
-        // $articles = Article::with('tags');
-        // $videos = Video::with('tags');
-
-        // $results = $articles->union($videos);
-
         //Get tag count without being affect by pagination        
-        $tags = $this->getTags();        
-        // $tags = [];
+        // $tags = $this->getTags();        
+        $tags = [];
 
         $results = $this->applySearchFilter();
-
-        // if($this->search) {
-        //     $results = $this->applySearchFilter($results);
-        //     $results->orderBy($this->sortByColumn(), $this->sortDirection());
-        // } else {
-        //     $results = $results->orderBy($this->sortByColumn(), $this->sortDirection())
-        // ->paginate($this->perPage);
-        // }
-
-
-        // $this->applyTagFilter($results);
-
         
+        $results = $this->sortDirection($results);
+
+        $results = $results                
+                ->paginate($this->perPage)
+                ->get();
+
+
+        $this->applyTagFilter($results);
+       
 
         return view('livewire.search')->with(compact('results', 'tags'));
     }
@@ -76,14 +68,20 @@ class Search extends Component
     public function sortByColumn()
     {
         $sort = explode("|", $this->sort);
-        return $sort[0] ?? null;
+        
+        return $sort[0];
     }
 
-    public function sortDirection()
+    public function sortDirection($results)
     {
         $sort = explode("|", $this->sort);
 
-        return $sort[1] ?? 'asc';
+        if($sort[1] === 'desc') {
+            return $results->orderByDesc();
+        }
+
+        return $results;
+
     }
 
     private function applySearchFilter()
@@ -91,9 +89,9 @@ class Search extends Component
         
         if($this->search) {        
             return CrossSearch::new()
-            ->add(Article::class, 'title', 'updated_at')
+            ->add(Article::with('tags'), 'title')
             ->orderBy($this->sortByColumn())
-            ->add(Video::class, 'title', 'updated_at')
+            ->add(Video::with('tags'), 'title')
             ->orderBy($this->sortByColumn())
             ->includeModelType()
             ->beginWithWildcard()
@@ -102,23 +100,23 @@ class Search extends Component
             ->paginate($this->perPage)
             ->get($this->search);
         }
-    
-        return CrossSearch::new()
-            ->add(Article::class, 'title', 'updated_at')
-            ->add(Video::class, 'title', 'updated_at')
-            ->orderByDesc()
-            ->includeModelType()
-            ->paginate($this->perPage)
-            ->get();
+        
+        //https://github.com/protonemedia/laravel-cross-eloquent-search#sorting
+        $x = CrossSearch::new();
+        $x->add(Article::with('tags'), 'title', $this->sortByColumn());
+        $x->add(Video::with('tags'), 'title', $this->sortByColumn());        
+        $x->includeModelType();
+
+        return $x;
 
 
         // return CrossSearch::new()
-        //     ->add(Article::with('tags'), 'title', 'updated_at')
-        //     ->add(Video::with('tags'), 'title', 'updated_at')
-        //     ->beginWithWildcard()
+        //     ->add(Article::with('tags'), 'title')
+        //     ->add(Video::with('tags'), 'title')            
+        //     ->includeModelType()
         //     ->orderByDesc()
-        //     ->paginate($this->perPage)
-        //     ->get($this->search);
+        //     ->paginate(100)
+        //     ->get();
 
             
     }

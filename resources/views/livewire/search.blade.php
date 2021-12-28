@@ -56,20 +56,19 @@
                     <select wire:model="sort" class="ml-1 bg-stone-100 dark:bg-stone-700">
                         <option value="title|asc" title="Title ascending">Title A-Z &uparrow;</option>
                         <option value="title|desc" title="Title descending">Title Z-A &downarrow;</option>
-                        <option value="created_at|desc" title="Date descending">Newest &downarrow;</option>
-                        <option value="created_at|asc" title="Date ascending">Oldest &uparrow;</option>
+                        <option value="updated_at|desc" title="Date descending">Newest &downarrow;</option>
+                        <option value="updated_at|asc" title="Date ascending">Oldest &uparrow;</option>
                     </select>
                 </div>
             </div>
-
-            {{ $sort }}
+            
             <div class="flex flex-col space-y-6 border-b dark:border-stone-700 mb-4 pb-4">
             @foreach($results as $result)
                 <article>
                     <header class="flex flex-col flex-col-reverse md:flex-row">
                         <h2 class="text-xl text-stone-600 dark:text-stone-500 tracking-wide flex-1 font-serif">
                         <small>[{{$result->type}}]</small> - {{$result->title}}</h2>
-                        <span class="text-sm text-stone-500 dark:text-stone-600">{{$result->created_at->diffForHumans()}}</span>
+                        <span class="text-sm text-stone-500 dark:text-stone-600">{{$result->updated_at->format('d M Y')}}</span>
                     </header>
 
                     @if($tags = $result->tags)
