@@ -16,7 +16,7 @@ class Search extends Component
 
     protected $listeners = ['filterByTag' => 'filterByTag'];
 
-    public $search;
+    public $search = '';
     public array $filters = [];
     public int $perPage = 10;
     public string $sort = 'updated_at|desc';
@@ -34,19 +34,21 @@ class Search extends Component
         //Get tag count without being affect by pagination        
         // $tags = $this->getTags();        
         $tags = [];
-
-        $results = $this->applySearchFilter();
         
+        $results = CrossSearch::new();
+        $results->add(Article::with('tags'), 'title', $this->sortByColumn());
+        $results->add(Video::with('tags'), 'title', $this->sortByColumn());        
+        $results->includeModelType();
+
         $results = $this->sortDirection($results);
 
         $results = $results                
                 ->paginate($this->perPage)
-                ->get();
+                ->beginWithWildcard()            
+                ->get($this->search);
 
-
-        $this->applyTagFilter($results);
+        // $this->applyTagFilter($results);
        
-
         return view('livewire.search')->with(compact('results', 'tags'));
     }
 
@@ -102,12 +104,12 @@ class Search extends Component
         }
         
         //https://github.com/protonemedia/laravel-cross-eloquent-search#sorting
-        $x = CrossSearch::new();
-        $x->add(Article::with('tags'), 'title', $this->sortByColumn());
-        $x->add(Video::with('tags'), 'title', $this->sortByColumn());        
-        $x->includeModelType();
+        $results = CrossSearch::new();
+        $results->add(Article::with('tags'), 'title', $this->sortByColumn());
+        $results->add(Video::with('tags'), 'title', $this->sortByColumn());        
+        $results->includeModelType();
 
-        return $x;
+        return $results;
 
 
         // return CrossSearch::new()
