@@ -1,10 +1,12 @@
 # Advanced search and filter with Laravel and Livewire
 
-A demo app using Laravel 8 and Livewire 2 showing how to implement a list of articles, videos and tags, via a **polymorphic relationship**, that can be searched and/or filtered by tags. 
+A demo app using Laravel 8 and Livewire 2 showing how to implement a list of articles and tags, via a **polymorphic relationship**, that can be searched and/or filtered by tags. 
 
-The Tag list shows the article/video count of each tag and works with pagination. Tags are colored* (via a color attribute on the db) to be easier to see they working. You cam select multiple tags and the filter will update the list of items.
+The Tag list shows the article count of each tag and works with pagination. Tags are colored* (via a color attribute on the db) to be easier to see they working. You cam select multiple tags and the filter will update the list of items.
 
-The demo provides a SQLite database (database/database.sqlite) already populated with 100 articles, 100 videos, and 50 tags, so you don't need to migrate the DB to see things working. But you can also seed the database with the provided seeder classes by running `php artisan migrate --seed` after updating your .env file.
+The demo provides a SQLite database (database/database.sqlite) already populated with 100 articles, and 50 tags, so you don't need to migrate the DB to see things working. But you can also seed the database with the provided seeder classes by running `php artisan migrate --seed` after updating your .env file.
+
+**The main branch only shows articles being listed**, for a **multi-model** refactored version, with articles and videos, check branch [search-multiple-models](https://github.com/sjardim/livewire-advanced-filter-by-tags-demo/tree/search-multiple-models).
 
 ## Screenshots
 
