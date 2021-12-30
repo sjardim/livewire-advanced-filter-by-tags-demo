@@ -12,11 +12,11 @@ The demo provides a SQLite database (database/database.sqlite) already populated
 
 - Version 2, a bit more complex, is a **multimodel** version, listing both articles and videos. Get it on branch [search-multiple-models](https://github.com/sjardim/livewire-advanced-filter-by-tags-demo/tree/search-multiple-models). It requires [/protonemedia/laravel-cross-eloquent-search](https://github.com/protonemedia/laravel-cross-eloquent-search)
 
-# Quick demo of version 2 (the multimodel version)
+### Quick demo of version 2 (the multimodel version)
 
 https://user-images.githubusercontent.com/125217/147776236-ff18e06c-3aae-4833-9469-592d41b4c71d.mp4
 
-## Screenshots of version 1
+### Screenshots of version 1
 
 <details>
 <summary>Light mode</summary>
