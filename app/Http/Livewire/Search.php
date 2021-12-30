@@ -8,6 +8,7 @@ use App\Models\Article;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use ProtoneMedia\LaravelCrossEloquentSearch\Search as CrossSearch;
 
 class Search extends Component
@@ -38,7 +39,6 @@ class Search extends Component
         $items->includeModelType();
 
         $items = $this->sortDirection($items);
-
         
         $items = $items                
                     ->paginate($this->perPage)
@@ -51,26 +51,8 @@ class Search extends Component
             $results = $items;
         }
 
-        // $x = CrossSearch::new()
-        //   	->add(Article::with('tags'), 'title')
-        // 	->add(Video::with('tags'), 'title')
-  		// 	->includeModelType()  			
-        //   	->get();
-
-        // $results = $items;
-
-        // if ($this->filters) {
-            
-        //         $results = $items->filter(function ($value, $key) {
-        //             return $value->tags->where('id', $this->filters);          
-        //         });
-            
-        // }
-
-
         //Get tag count without being affect by pagination        
         $tags = $this->getTags();        
-        // $tags = [];
        
         return view('livewire.search')->with(compact('results', 'tags'));
     }
@@ -113,29 +95,45 @@ class Search extends Component
     private function applyTagFilter($items)
     {
 
-        $items = CrossSearch::new();
-        $items->add(Article::with('tags'), ['tags.id'], $this->sortByColumn());
-        $items->add(Video::with('tags'), ['tags.id'], $this->sortByColumn());        
+        $items = CrossSearch::new();  
+        
+        $selectedTags = $this->filters;
+        
+        $items->add(
+            Article::with('tags')
+                ->whereHas('tags', function ($query) use ($selectedTags) {
+                    $query->whereIn('id', $selectedTags);
+                }), 
+            ['title'],
+            $this->sortByColumn());
+
+            $items->add(
+                Video::with('tags')
+                    ->whereHas('tags', function ($query) use ($selectedTags) {
+                        $query->whereIn('id', $selectedTags);
+                    }), 
+                ['title'],
+                $this->sortByColumn());
+        
+
         $items->includeModelType();
 
         $items = $this->sortDirection($items);
 
         return $items                
-            ->paginate($this->perPage)        
-            ->get(implode(', ', $this->filters));
-        
+            ->paginate($this->perPage)
+            ->beginWithWildcard()
+            ->get($this->search);
     }
 
     private function getTags()
     {
-        $tags = Tag::withCount(['articles', 'videos'])
-            ->orderBy('name', 'ASC')         
+        return Tag::withCount(['articles', 'videos'])
+            ->having('articles_count', '>=', 1)
+            ->having('videos_count', '>=', 1)            
+            ->orderBy(DB::raw("`articles_count` + `videos_count`"), 'DESC')
+            ->take(15)         
             ->get();
-
-        // Show only tags that have at least 10 articles
-        return $tags->filter( function ($tag) {
-            return $tag->articles_count + $tag->videos_count > 5;
-        });
     }
 
 }

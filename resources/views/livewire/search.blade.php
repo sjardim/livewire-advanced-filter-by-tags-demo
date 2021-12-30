@@ -40,8 +40,6 @@
         </div>
     @endif
 
-    @dump($filters)
-
     <div class="">
         @if($results->count())
             <div class="my-6 border-b dark:border-stone-700 pb-2 text-sm flex justify-between">
