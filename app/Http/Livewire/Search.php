@@ -88,6 +88,14 @@ class Search extends Component
     private function applyTagFilter($articles)
     {
         if ($this->filters) {
+
+         
+            // //Accumulative filter, boolean OR, show items containing ANY of the selected tags
+            // $articles->whereHas('tags', function ($query) {
+            //     $query->whereIn('id', $this->filters);
+            // });
+            
+            //Accumulative filter, boolean AND, only show items containing ALL of the selected tags
             foreach ($this->filters as $filter) {
                 $articles->whereHas('tags', function ($query) use ($filter) {
                     $query->where('id', $filter);
@@ -100,15 +108,11 @@ class Search extends Component
 
     private function getTags()
     {
-        $tags = Tag::withCount('articles')
+        return Tag::withCount('articles')
+            ->having('articles_count', '>', 5)
             ->orderBy('articles_count', 'DESC')
-            ->take(15)
+            ->take(10)
             ->get();
-
-        // Show only tags with articles
-        return $tags->filter( function ($tag) {
-            return $tag->articles_count > 0;
-        });
     }
 
 }
