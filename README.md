@@ -6,7 +6,9 @@ The Tag list shows the article count of each tag and works with pagination. Tags
 
 The demo provides a SQLite database (database/database.sqlite) already populated with 100 articles, and 50 tags, so you don't need to migrate the DB to see things working. But you can also seed the database with the provided seeder classes by running `php artisan migrate --seed` after updating your .env file.
 
-**The main branch only shows articles being listed**, for a **multi-model** refactored version, with articles and videos, check branch [search-multiple-models](https://github.com/sjardim/livewire-advanced-filter-by-tags-demo/tree/search-multiple-models).
+## Choose one of the versions
+
+**The main branch only shows articles being listed**, for a more complex, **multimodel** version, listing both articles and videos, check the branch [search-multiple-models](https://github.com/sjardim/livewire-advanced-filter-by-tags-demo/tree/search-multiple-models). On that branch there's a quick video recording of this advanced version running. :)
 
 ## Screenshots
 
