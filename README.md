@@ -4,7 +4,7 @@ A demo app using Laravel 8 and Livewire 2 showing how to implement a list of art
 
 The Tag list shows the article/video count of each tag and works with pagination. Tags are colored* (via a color attribute on the db) to be easier to see they working. You cam select multiple tags and the filter will update the list of items.
 
-The demo provides a SQLite database (database/database.sqlite) already populated with 100 articles, 100 videos, and 50 tags, so you don't need to migrate the DB to see things working. But you can also seed the database with the provided seeder classes by running `php artisan migrate --seed` after updating your .env file.
+This version 2 does NOT work on a SQLite database. You can also seed the database with the provided seeder classes by running `php artisan migrate --seed` after updating your .env file.
 
 This demo app is an updated and improved version of my old [Livewire 1 demo](https://github.com/sjardim/laravel-livewire-demo) which was based from [/breadthe/laravel-livewire-demo](https://github.com/breadthe/laravel-livewire-demo).
 
@@ -17,17 +17,16 @@ https://user-images.githubusercontent.com/125217/147776236-ff18e06c-3aae-4833-94
 
 1. Clone the repo
 1. Run `composer install`
-1. Rename `.env.example` to `.env` and change the **database settings** according to your machine
-1. Run `php artisan migrate --seed` to load fake content into your database
+1. Rename `.env.example` to `.env` and change the **database settings** according to your machine. **This version won't work with SQLite.**
+1. Run `php artisan migrate --seed` to load fake content into your database. 
 1. Run `php artisan serve` if you are not using Laravel Valet.
 
 You don't need to run `npm install` as we are using Tailwind CSS 3.0 via its CDN on `layouts/app.blade.php`. :)
 
 ## Performance
 
-Loading 10 articles (titles + date + tags) per page and the 15 most used tags on my 13" MacBook Pro M1, took on **subsequent page loads**:
+Loading 10 articles/videos per page and the 15 most used tags on my 13" MacBook Pro M1, took on **subsequent page loads**:
 
-1. Using the provided SQLite database: less than 50ms using 2MB of RAM.
 1. Using the a MySQL 8.0.22 database: less than 80ms using 2MB of RAM.
 
 Measured using [Laravel DebugBar](https://github.com/barryvdh/laravel-debugbar).
