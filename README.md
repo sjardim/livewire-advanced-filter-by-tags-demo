@@ -12,18 +12,6 @@ This demo app is an updated and improved version of my old [Livewire 1 demo](htt
 
 https://user-images.githubusercontent.com/125217/147776236-ff18e06c-3aae-4833-9469-592d41b4c71d.mp4
 
-## Screenshots
-
-<details>
-<summary>Light mode</summary>
-<img src="https://user-images.githubusercontent.com/125217/147500063-bbe79fb6-4617-4d97-a087-023bcce67564.png" width="800" alt="" />
-</details>
-
-<details>
-<summary>Dark mode</summary>
-<img src="https://user-images.githubusercontent.com/125217/147500417-c146882c-5b7d-426b-8f77-e0080d8af7d2.png" width="800" alt="" />
-</details>
-
 
 ## How to run the demo
 
