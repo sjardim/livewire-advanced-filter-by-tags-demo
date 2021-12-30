@@ -31,41 +31,50 @@ class Search extends Component
 
     public function render()
     {
-        //Get tag count without being affect by pagination        
-        // $tags = $this->getTags();        
-        $tags = [];
+    
+        $items = CrossSearch::new();
+        $items->add(Article::with('tags'), ['title'], $this->sortByColumn());
+        $items->add(Video::with('tags'), ['title'], $this->sortByColumn());        
+        $items->includeModelType();
+
+        $items = $this->sortDirection($items);
+
         
-        $results = CrossSearch::new();
-        $results->add(Article::with('tags'), 'title', $this->sortByColumn());
-        $results->add(Video::with('tags'), 'title', $this->sortByColumn());        
-        $results->includeModelType();
+        $items = $items                
+                    ->paginate($this->perPage)
+                    ->beginWithWildcard()            
+                    ->get($this->search); //empty search will return all items
+              
+        if ($this->filters) {
+            $results = $this->applyTagFilter($items);            
+        } else {
+            $results = $items;
+        }
 
-        $results = $this->sortDirection($results);
+        // $x = CrossSearch::new()
+        //   	->add(Article::with('tags'), 'title')
+        // 	->add(Video::with('tags'), 'title')
+  		// 	->includeModelType()  			
+        //   	->get();
 
-        $results = $results                
-                ->paginate($this->perPage)
-                ->beginWithWildcard()            
-                ->get($this->search);
+        // $results = $items;
 
-        // $this->applyTagFilter($results);
+        // if ($this->filters) {
+            
+        //         $results = $items->filter(function ($value, $key) {
+        //             return $value->tags->where('id', $this->filters);          
+        //         });
+            
+        // }
+
+
+        //Get tag count without being affect by pagination        
+        $tags = $this->getTags();        
+        // $tags = [];
        
         return view('livewire.search')->with(compact('results', 'tags'));
     }
 
-    
-    public function filterByTag($tag)
-    {
-        if (in_array($tag, $this->filters)) {
-            $ix = array_search($tag, $this->filters);
-
-            unset($this->filters[$ix]);
-        } else {
-            $this->filters[] = $tag;
-
-            //Reset pagination, otherwise filter won't work
-            $this->resetPage();
-        }
-    }
 
     public function sortByColumn()
     {
@@ -86,67 +95,46 @@ class Search extends Component
 
     }
 
-    private function applySearchFilter()
+
+    public function filterByTag($tag)
     {
-        
-        if($this->search) {        
-            return CrossSearch::new()
-            ->add(Article::with('tags'), 'title')
-            ->orderBy($this->sortByColumn())
-            ->add(Video::with('tags'), 'title')
-            ->orderBy($this->sortByColumn())
-            ->includeModelType()
-            ->beginWithWildcard()
-            // ->orderByRelevance()
-            ->orderByDesc()
-            ->paginate($this->perPage)
-            ->get($this->search);
+        if (in_array($tag, $this->filters)) {
+            $ix = array_search($tag, $this->filters);
+
+            unset($this->filters[$ix]);
+        } else {
+            $this->filters[] = $tag;
+
+            //Reset pagination, otherwise filter won't work
+            $this->resetPage();
         }
-        
-        //https://github.com/protonemedia/laravel-cross-eloquent-search#sorting
-        $results = CrossSearch::new();
-        $results->add(Article::with('tags'), 'title', $this->sortByColumn());
-        $results->add(Video::with('tags'), 'title', $this->sortByColumn());        
-        $results->includeModelType();
-
-        return $results;
-
-
-        // return CrossSearch::new()
-        //     ->add(Article::with('tags'), 'title')
-        //     ->add(Video::with('tags'), 'title')            
-        //     ->includeModelType()
-        //     ->orderByDesc()
-        //     ->paginate(100)
-        //     ->get();
-
-            
     }
 
-    private function applyTagFilter($results)
+    private function applyTagFilter($items)
     {
-        if ($this->filters) {
-            foreach ($this->filters as $filter) {
-                $results->whereHas('tags', function ($query) use ($filter) {
-                    $query->where('id', $filter);
-                });
-            }
-        }
 
-        return null;
+        $items = CrossSearch::new();
+        $items->add(Article::with('tags'), ['tags.id'], $this->sortByColumn());
+        $items->add(Video::with('tags'), ['tags.id'], $this->sortByColumn());        
+        $items->includeModelType();
+
+        $items = $this->sortDirection($items);
+
+        return $items                
+            ->paginate($this->perPage)        
+            ->get(implode(', ', $this->filters));
+        
     }
 
     private function getTags()
     {
         $tags = Tag::withCount(['articles', 'videos'])
-            ->orderBy('articles_count', 'DESC')            
-            ->orderBy('videos_count', 'DESC')
-            ->take(15)
+            ->orderBy('name', 'ASC')         
             ->get();
 
-        // Show only tags that are used
+        // Show only tags that have at least 10 articles
         return $tags->filter( function ($tag) {
-            return $tag->articles_count > 0;
+            return $tag->articles_count + $tag->videos_count > 5;
         });
     }
 

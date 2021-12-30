@@ -40,6 +40,8 @@
         </div>
     @endif
 
+    @dump($filters)
+
     <div class="">
         @if($results->count())
             <div class="my-6 border-b dark:border-stone-700 pb-2 text-sm flex justify-between">
@@ -90,8 +92,9 @@
             @endforeach
             </div>
 
-
-            {{ $results->links() }}
+            
+            {{$results->links()}}
+            
 
         @else
             <h2 class="text-xl text-stone-600 dark:text-stone-500 tracking-wide flex-1 font-serif py-8">No results found.</h2>
