@@ -128,12 +128,15 @@ class Search extends Component
 
     private function getTags()
     {
-        return Tag::withCount(['articles', 'videos'])
-            ->having('articles_count', '>=', 1)
-            ->having('videos_count', '>=', 1)            
-            ->orderBy(DB::raw("`articles_count` + `videos_count`"), 'DESC')
+        $tags = Tag::withCount(['articles', 'videos'])
+            ->having('articles_count', '>=', 10)
+            ->having('videos_count', '>=', 10)                        
             ->take(15)         
             ->get();
+
+        // Let's sort the tags in memory as its quicker than using
+        // ->orderBy(DB::raw("`articles_count` + `videos_count`"), 'DESC')
+        return $tags->sortByDesc("`articles_count` + `videos_count`");
     }
 
 }
