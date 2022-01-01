@@ -14,7 +14,11 @@ The demo provides a SQLite database (database/database.sqlite) already populated
 
 ### Quick demo of version 2 (the multimodel version)
 
+You can see it live here: https://livewire.sergiojardim.com/
+
 https://user-images.githubusercontent.com/125217/147776236-ff18e06c-3aae-4833-9469-592d41b4c71d.mp4
+
+
 
 ### Screenshots of version 1
 
