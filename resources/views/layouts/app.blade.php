@@ -13,6 +13,8 @@
 
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
+    <script defer data-domain="livewire.sergiojardim.com" src="https://plausible.io/js/plausible.js"></script>
+
     @livewireStyles
 </head>
 <body class="bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400">
