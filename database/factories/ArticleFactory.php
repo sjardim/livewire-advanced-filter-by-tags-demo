@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ArticleFactory extends Factory
 {
+    
     /**
      * Define the model's default state.
      *
@@ -13,10 +14,14 @@ class ArticleFactory extends Factory
      */
     public function definition()
     {
+        //Choose your language
+        //Note that catchPhrase() will only return text in US English (en_US)
+        $faker = \Faker\Factory::create('pt_BR');
+        
         return [
-            'title' => $this->faker->catchPhrase(),
-            'created_at' => $this->faker->dateTimeThisMonth(),
-            'updated_at' => $this->faker->dateTimeThisMonth(),
+            'title' => $this->faker->catchPhrase(). ' – '. $faker->name(),
+            'created_at' => $faker->dateTimeThisMonth(),
+            'updated_at' => $faker->dateTimeThisMonth(),
         ];
     }
 }
