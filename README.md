@@ -28,7 +28,7 @@ You don't need to run `npm install` as we are using Tailwind CSS 3.0 via its CDN
 
 ## Performance
 
-Loading 100 items (500 articles, 500 videos), 10 per page, and the 15 most used tags on my 13" MacBook Pro M1, took on **subsequent page loads**:
+Loading 1000 items (500 articles, 500 videos [title, and their tags]), 10 per page, and the 15 most used tags on my 13" MacBook Pro M1, took on **subsequent page loads**:
 
 1. Using the a MySQL 8.0.22 database: less than 80ms using 2MB of RAM.
 
