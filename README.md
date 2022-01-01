@@ -8,10 +8,13 @@ This version 2 does NOT work on a SQLite database. You can also seed the databas
 
 This demo app is an updated and improved version of my old [Livewire 1 demo](https://github.com/sjardim/laravel-livewire-demo) which was based from [/breadthe/laravel-livewire-demo](https://github.com/breadthe/laravel-livewire-demo).
 
-## Quick Demo
+## Preview
 
 https://user-images.githubusercontent.com/125217/147776236-ff18e06c-3aae-4833-9469-592d41b4c71d.mp4
 
+## Demo
+
+https://livewire.sergiojardim.com/
 
 ## How to run the demo
 
