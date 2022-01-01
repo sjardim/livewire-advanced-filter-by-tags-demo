@@ -28,11 +28,13 @@ You don't need to run `npm install` as we are using Tailwind CSS 3.0 via its CDN
 
 ## Performance
 
-Loading 10 articles/videos per page and the 15 most used tags on my 13" MacBook Pro M1, took on **subsequent page loads**:
+Loading 100 items (500 articles, 500 videos), 10 per page, and the 15 most used tags on my 13" MacBook Pro M1, took on **subsequent page loads**:
 
 1. Using the a MySQL 8.0.22 database: less than 80ms using 2MB of RAM.
 
 Measured using [Laravel DebugBar](https://github.com/barryvdh/laravel-debugbar).
+
+Note: The aforementioned [demo](https://livewire.sergiojardim.com/) is running on a 4GB Hetzner VPS using MariaDB.
 
 ---
 **\*Note**: the tags colors were generated randomly and text contrast sometimes is bad, please on a real app consider fixing this for a better UX.
