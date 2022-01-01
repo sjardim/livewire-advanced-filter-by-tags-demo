@@ -36,5 +36,9 @@ Measured using [Laravel DebugBar](https://github.com/barryvdh/laravel-debugbar).
 
 Note: The aforementioned [demo](https://livewire.sergiojardim.com/) is running on a 4GB Hetzner VPS using MariaDB.
 
+## Todo
+
+Add tests. :)
+
 ---
 **\*Note**: the tags colors were generated randomly and text contrast sometimes is bad, please on a real app consider fixing this for a better UX.
